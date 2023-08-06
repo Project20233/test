@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Status</h1>
+    <h2 id="detect">Status</h2>
+
+    <script>
+        var text = document.querySelector("#detect");
+        document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+            // backgroundMusic.play();
+            console.log("Active Tab 1");
+        } else {
+            // backgroundMusic.pause();
+            console.log("Inctive Tab 1");
+            text.innerHTML = "Inctive Tab";
+        }
+        });
+    </script>
+</body>
+</html>
