@@ -7,7 +7,7 @@ from PyQt5 import QtGui
 from datetime import datetime
 from datetime import datetime
 ##Lora
-import socket
+import socket, errno
 import firebase_admin
 from firebase_admin import db, credentials, storage
 import time
@@ -127,42 +127,37 @@ def getList():
         listS.append(y[value])
     print(listS)
 
-def is_port_in_use(port: int) -> bool:
 
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
 
 def connect():
-    # try:
-    #
-    # except KeyboardInterrupt:
-    #     print('Interrupted')
-
 
     try:
-
+        getList()
+    except KeyboardInterrupt:
+        print('Interrupted')
+    try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            print(is_port_in_use(PORT))
-            if is_port_in_use(PORT):
-                getList()
-            # if s.connect_ex((HOST, PORT)) == 0:
-                s.bind((HOST, PORT))
-                s.listen()
-                conn, addr = s.accept()
-                print("fkml")
-                with conn:
-                    print(f"Connected by {addr}")
-                    while True:
 
-                        data = conn.recv(10000)
-                        if data:
-                            # print(f"Received {data!r}")
-                            getData(data)
-                        if not data:
-                            break
-                        conn.sendall(data)
-            else:
-                dlg.label_2.setText("There are problem")
+            s.bind((HOST, PORT))
+            s.listen()
+            conn, addr = s.accept()
+            print("fkml")
+            with conn:
+                print(f"Connected by {addr}")
+                while True:
+                    data = conn.recv(10000)
+                    if data:
+                        # print(f"Received {data!r}")
+                        getData(data)
+                    if not data:
+                        break
+                    conn.sendall(data)
+    except socket.error as e:
+        if e.errno == errno.EADDRINUSE:
+            print("Port is already in use")
+        else:
+            # something else raised the socket.error exception
+            print(e)
 
     except KeyboardInterrupt:
         print('Interrupted')
