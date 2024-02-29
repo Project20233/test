@@ -133,18 +133,19 @@ def is_port_in_use(port: int) -> bool:
         return s.connect_ex(('localhost', port)) == 0
 
 def connect():
-    try:
-        getList()
-    except KeyboardInterrupt:
-        print('Interrupted')
+    # try:
+    #
+    # except KeyboardInterrupt:
+    #     print('Interrupted')
 
 
     try:
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print(is_port_in_use(PORT))
-            # if is_port_in_use(PORT):
-            if s.connect_ex((HOST, PORT)) == 0:
+            if is_port_in_use(PORT):
+                getList()
+            # if s.connect_ex((HOST, PORT)) == 0:
                 s.bind((HOST, PORT))
                 s.listen()
                 conn, addr = s.accept()
